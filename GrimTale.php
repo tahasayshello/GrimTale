@@ -1,9 +1,8 @@
 <?php
-define("DEBUG", false); // debug constant
+define("DEBUG", false); // skip dialogue
 
 Write("WHAT IS THE NAME OF OUR SAVIOUR AND HERO?", false);
 $NAME = readline();
-
 ClearScreen();
 
 $STORY = "Once upon a time, there was a continent known as Grasstonia.
@@ -17,7 +16,7 @@ Believed in by the inhabitants of the land, that speaks of a hero by the name ''
 that will retrieve the land that was taken by the evil warlord, and bring peace to the land once and for
 all. ";
 
-// The HP and ATK damage of the player and enemy are saved in these arrays
+// stats of player and enemies
 $PLR = [
     "ATK" => 50,
     "HP" => 100,
