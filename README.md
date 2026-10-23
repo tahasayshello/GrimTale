@@ -1,4 +1,4 @@
 # GrimTale
 Command Line Interface game for an assignment
 
-Entirely made by mes
+Entirely made by me
