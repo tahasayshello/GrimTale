@@ -365,9 +365,9 @@ while ($PLAYING == true) {
             if ($RESULT == "WON") {
                 ClearScreen();
                 Write("Lord Chain is brought to his knees, he looks at you and speaks his last words:", false);
-                Write("'It seems i have been defeated, before i leave this world.. i have one more request..'", false);
+                Write("'It seems I have been defeated, before I die, I have one more request..'", false);
                 ClearScreen();
-                SlowText("LET FATE TOY WITH YOU LIKE A FOOL.");
+                SlowText("Let fate toy with you like a fool");
                 Write("He falls to the ground and does not move again. You may have won the battle, but was it worth the blood on your hands..? (NEUTRAL ENDING)", false);
                 $PLAYING = false;
             }
