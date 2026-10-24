@@ -1,5 +1,5 @@
 <?php
-define("DEBUG", false); // skip dialogue
+define("DEBUG", true); // skip dialogue
 
 Write("WHAT IS THE NAME OF OUR SAVIOUR AND HERO?", false);
 $NAME = readline();
@@ -16,6 +16,9 @@ Believed in by the inhabitants of the land, that speaks of a hero by the name ''
 that will retrieve the land that was taken by the evil warlord, and bring peace to the land once and for
 all. ";
 
+if (DEBUG == true) {
+    $STORY = "DEBUG";
+}
 // stats of player and enemies
 $PLR = [
     "ATK" => 50,
@@ -43,20 +46,20 @@ $SHARD = false; // becomes true when the OPAQUE SHARD is picked up
 
 function Write(string $STORY, bool $SKIP)
 {
-    if (DEBUG === true || $SKIP === true) {
+    if ($SKIP === true) {
         echo $STORY . PHP_EOL; // instant echo
         return;
     }
 
     $keys = 0;
     while (true) {
-        $ch = @$STORY[$keys]; // @ to ignore string errors
+        $ch = @$STORY[$keys]; // @ to ignore string warnings
         if ($ch == "") {
             echo PHP_EOL;
             break;
         }
         echo $ch;
-        if ($ch == "." || $ch == ",") {
+        if ($ch == "." || $ch == "," || $ch == "?" || $ch == "!") {
             sleep(1);
         } else {
             usleep(20000);
@@ -65,9 +68,28 @@ function Write(string $STORY, bool $SKIP)
     }
 }
 
+function SlowText(string $STORY)
+{
+    $keys = 0;
+    while (true) {
+        $ch = @$STORY[$keys]; // @ to ignore string warnings
+        if ($ch == "") {
+            echo PHP_EOL;
+            break;
+        }
+        echo $ch;
+        if ($ch == "." || $ch == ",") {
+            sleep(2);
+        } else {
+            usleep(90000);
+        }
+        $keys++;
+    }
+}
+
 function ClearScreen()
 {
-    echo "\e[H\e[J"; // this command clears the output
+    echo "\e[H\e[J"; // this command clears the terminal
 }
 
 function Scenario(string $TEXT, array $OPTIONS)
@@ -84,7 +106,7 @@ function Scenario(string $TEXT, array $OPTIONS)
 
     foreach ($OPTIONS as $OPTION => $RESULT) {
         if ($prompt == $OPTION) {
-            Write("You have chosen the option: $prompt, $RESULT", false);
+            Write("You chose $prompt, $RESULT", false);
             return $OPTION; // gives back the option if called as a variable
         }
     }
@@ -95,10 +117,10 @@ function Scenario(string $TEXT, array $OPTIONS)
     return Scenario($TEXT, $OPTIONS); // runs the function again after invalid input
 }
 
-// Battle system: every turn the player chooses ATK or DEF
+// battle system, every turn the player chooses ATK or DEF
 // ATK = hurt the enemy but you take the full hit
 // DEF = you only take 1 dmg if you keep defending the enemy gets exhausted and stops fighting
-// returns "WON", "DEAD" or "EXHAUSTED"
+// returns "WON" "DEAD" or "EXHAUSTED"
 function Battle(array $FOE, string $FOENAME, bool $SHOWATK)
 {
     global $PLR;
@@ -110,7 +132,7 @@ function Battle(array $FOE, string $FOENAME, bool $SHOWATK)
         if ($SHOWATK == true) {
             Write("$FOENAME | HP: " . $FOE["HP"] . " | ATK: " . $FOE["ATK"], true);
         } else {
-            Write("$FOENAME | HP: " . $FOE["HP"] . " | ATK: ???", true);
+            Write("$FOENAME | HP: " . $FOE["HP"] . " | ATK: ???", true); // for the boss
         }
         Write("You | HP: " . $PLR["HP"] . " | ATK: " . $PLR["ATK"], true);
 
@@ -142,16 +164,7 @@ function Battle(array $FOE, string $FOENAME, bool $SHOWATK)
     }
 }
 
-// if (str_contains($NAME, ";") || str_contains($NAME, "/") || str_contains($NAME, "]") || str_contains($NAME, "[") || str_contains($NAME, "{") || str_contains($NAME, "}") || str_contains($NAME, "|") || is_numeric($NAME) || $NAME == "") {
-//     Write("THERE IS NO PLACE FOR A NAMELESS HERO HERE.", false);
-//     ClearScreen();
-//     exit;
-// }
-
-// unneccesary name validation since were not allowed to use string functions
-
 Write($STORY, false);
-
 ClearScreen();
 
 // first save point
@@ -339,29 +352,35 @@ while ($PLAYING == true) {
                 $DEAD = true;
             }
 
+            // GOOD ENDING
             if ($RESULT == "EXHAUSTED") {
-                // GOOD ENDING
+                ClearScreen();
                 Write("Lord Chain is out of breath, he can't hit you anymore and lowers his weapon.", false);
                 Write("Your defence has made him realise how much he has lost himself, and says: 'You are right, hero, I have no more reason to fight..'", false);
                 Write("He leaves the continent in peace, and light returns to Grasstonia. $NAME is remembered as the saviour of the land. (GOOD ENDING)", false);
                 $PLAYING = false;
             }
 
+            // NEUTRAL ENDING
             if ($RESULT == "WON") {
-                // NEUTRAL ENDING
-                Write("Lord Chain is brought to his knees, he looks at $NAME and speaks his last words:", false);
-                Write("'So the prophecy was true.. may the darkness I made fade with me..'", false);
-                Write("He falls to the ground and does not move again. The land is free, but at what cost.. (NEUTRAL ENDING)", false);
+                ClearScreen();
+                Write("Lord Chain is brought to his knees, he looks at you and speaks his last words:", false);
+                Write("'It seems i have been defeated, before i leave this world.. i have one more request..'", false);
+                ClearScreen();
+                SlowText("LET FATE TOY WITH YOU LIKE A FOOL.");
+                Write("He falls to the ground and does not move again. You may have won the battle, but was it worth the blood on your hands..? (NEUTRAL ENDING)", false);
                 $PLAYING = false;
             }
         }
     }
 
-    // ---------------------------------------------------------------- death screen
+    // death screen
     if ($DEAD == true) {
-        Write("You have died, alas.. your journey ends here.", false);
+        ClearScreen();
 
-        $AGAIN = Scenario("Start again from the last save point, or give up?", ["Retry" => "You rise from the ashes..", "Quit" => "You give up.."]);
+        Write("You have died, unfortunately.. your journey ends here.", false);
+
+        $AGAIN = Scenario("Start again from the last save point, or give up?", ["Retry" => "You start to slowly get up..", "Quit" => "Then so shall be done.."]);
 
         if ($AGAIN == "Retry") {
             // go back to the stats from the last save point
@@ -370,10 +389,10 @@ while ($PLAYING == true) {
             $DEAD = false;
         } else {
             Write("Closing game..", false);
+            ClearScreen();
             exit;
         }
     }
 }
 
 Write("THE END", false);
-Write("YOUR FINAL SCORE: " . $PLR["LVL"], false);
