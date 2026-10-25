@@ -1,5 +1,5 @@
 <?php
-define("DEBUG", true); // skip dialogue
+define("DEBUG", false); // skip dialogue
 
 Write("WHAT IS THE NAME OF OUR SAVIOUR AND HERO?", false);
 $NAME = readline();
@@ -59,7 +59,7 @@ function Write(string $STORY, bool $SKIP)
             break;
         }
         echo $ch;
-        if ($ch == "." || $ch == "," || $ch == "?" || $ch == "!") {
+        if ($ch == "." || $ch == "," || $ch == "?" || $ch == "!") { // pause
             sleep(1);
         } else {
             usleep(20000);
@@ -136,7 +136,7 @@ function Battle(array $FOE, string $FOENAME, bool $SHOWATK)
         }
         Write("You | HP: " . $PLR["HP"] . " | ATK: " . $PLR["ATK"], true);
 
-        $ACTION = Scenario("What will you do?", ["ATK" => "You attack the $FOENAME!", "DEF" => "You raise your guard.."]);
+        $ACTION = Scenario("What will you do?", ["ATK" => "You attack $FOENAME!", "DEF" => "You raise your guard.."]);
 
         if ($ACTION == "ATK") {
             $FOE["HP"] -= $PLR["ATK"];
@@ -156,7 +156,7 @@ function Battle(array $FOE, string $FOENAME, bool $SHOWATK)
         }
 
         $PLR["HP"] -= $DMG;
-        Write("The $FOENAME hits you for $DMG dmg.", true);
+        Write("The $FOENAME attacks you and deals $DMG dmg.", true);
 
         if ($PLR["HP"] <= 0) { // player death
             return "DEAD";
