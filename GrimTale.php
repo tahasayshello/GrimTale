@@ -190,7 +190,7 @@ while ($PLAYING == true) {
 
             if ($PICK == "Yes") {
                 $SHARD = true;
-                Write("You have obtained the item: OPAQUE SHARD!", true);
+                Write("You have obtained the item: OPAQUE SHARD!", false);
             }
 
             Write("You keep walking through the forest..", false);
@@ -279,7 +279,7 @@ while ($PLAYING == true) {
         $INROOM = true;
 
         while ($INROOM == true && $DEAD == false) {
-            $CHOSEN = Scenario("Which door will you go to? (1 - 5)", ["1" => "You walk to the first door..", "2" => "You walk to the second door..", "3" => "You walk to the third door..", "4" => "You walk to the fourth door..", "5" => "You walk to the last door.."]);
+            $CHOSEN = Scenario("Which door will you go to? ", ["1" => "You walk to the first door..", "2" => "You walk to the second door..", "3" => "You walk to the third door..", "4" => "You walk to the fourth door..", "5" => "You walk to the last door.."]);
 
             if ($CHOSEN == 1) {
                 $ACT = Scenario("Do you open the door or go back?", ["Open" => "You open the door..", "Back" => "You walk back to the middle of the room.."]);
@@ -341,7 +341,7 @@ while ($PLAYING == true) {
             Write("The figure steps into the light and introduces himself as the evil warlord.. LORD CHAIN!", false);
 
             if ($SHARD == true) {
-                Write("The OPAQUE SHARD in your bag starts to glow, you feel an enormous power flowing through you!", false);
+                Write("The OPAQUE SHARD in your bag starts to glow, you feel an enormous power flowing through you! (ATK HAS GONE UP)", false);
                 $PLR["ATK"] += 2500;
             }
 
@@ -356,7 +356,7 @@ while ($PLAYING == true) {
             if ($RESULT == "EXHAUSTED") {
                 ClearScreen();
                 Write("Lord Chain is out of breath, he can't hit you anymore and lowers his weapon.", false);
-                Write("Your defence has made him realise how much he has lost himself, and says: 'You are right, hero, I have no more reason to fight..'", false);
+                Write("Your determination to constantly defend has made him realize how much he has lost himself, and says: 'You really are something else.. I'm outta here!'", false);
                 Write("He leaves the continent in peace, and light returns to Grasstonia. $NAME is remembered as the saviour of the land. (GOOD ENDING)", false);
                 $PLAYING = false;
             }
@@ -367,7 +367,8 @@ while ($PLAYING == true) {
                 Write("Lord Chain is brought to his knees, he looks at you and speaks his last words:", false);
                 Write("'It seems I have been defeated, before I die, I have one more request..'", false);
                 ClearScreen();
-                SlowText("Let fate toy with you like a fool");
+                SlowText("Let fate toy with you like a fool.");
+                ClearScreen();
                 Write("He falls to the ground and does not move again. You may have won the battle, but was it worth the blood on your hands..? (NEUTRAL ENDING)", false);
                 $PLAYING = false;
             }
@@ -395,4 +396,4 @@ while ($PLAYING == true) {
     }
 }
 
-Write("THE END", false);
+//Write("THE END", false);
