@@ -68,7 +68,7 @@ function Write(string $STORY, bool $SKIP)
     }
 }
 
-function SlowText(string $STORY)
+function SlowText(string $STORY) // function for boss speech
 {
     $keys = 0;
     while (true) {
